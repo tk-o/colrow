@@ -1,0 +1,39 @@
+{
+  "name": "colrow",
+  "version": "1.0.0",
+  "description": "Simple toolset to build super-powered table components in React 🗓",
+  "main": "dist/index.js",
+  "repository": "git@github.com:kopacki/colrow.git",
+  "author": "Tomasz Kopacki <tomasz@kopacki.net>",
+  "license": "MIT",
+  "jest": {
+    "cacheDirectory": "./node_modules/.cache",
+    "collectCoverageFrom": [
+      "src/*.(jsx|jsx)"
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/config/setupTests.js"
+  },
+  "dependencies": {
+    "react": "16.2.0",
+    "react-dom": "16.2.0"
+  },
+  "devDependencies": {
+    "babel-cli": "6.26.0",
+    "babel-plugin-syntax-object-rest-spread": "6.13.0",
+    "babel-plugin-transform-class-properties": "6.24.1",
+    "babel-preset-env": "1.6.1",
+    "babel-preset-react": "6.24.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "eslint": "4.16.0",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint-plugin-react": "^7.6.0",
+    "jest": "22.1.4",
+    "nps-utils": "1.5.0",
+    "parcel-bundler": "1.5.0",
+    "prop-types": "^15.6.0",
+    "ramda": "^0.25.0"
+  }
+}
