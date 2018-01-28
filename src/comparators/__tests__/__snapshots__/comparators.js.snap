@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sorting numbers 1`] = `
+Array [
+  -Infinity,
+  null,
+  -1234322343432,
+  -0.43,
+  0,
+  1.23,
+  123235235234,
+  Infinity,
+  undefined,
+]
+`;
+
+exports[`sorting strings 1`] = `
+Array [
+  "",
+  " ",
+  "_acd",
+  "abcd",
+  "aecd",
+  "bac",
+  "bbc",
+  null,
+  undefined,
+]
+`;
