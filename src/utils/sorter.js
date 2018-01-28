@@ -3,7 +3,11 @@ export default function sort({
   direction,
   collection,
 }) {
-  return collection;
+  const sortedCollection = [...collection];
+
+  return direction !== SortingDirection.DESC
+    ? sortedCollection
+    : sortedCollection.reverse();
 }
 
 export const SortingDirection = Object.freeze({
