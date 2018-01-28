@@ -3,7 +3,7 @@ const { concurrent } = require('nps-utils');
 module.exports = {
   scripts: {
     default: 'parcel -p index.html',
-    build: 'parcel build src/colrow.jsx --out-dir build',
+    build: 'parcel build src/index.js --out-dir build',
     test: {
       default: 'jest',
       watch: 'jest --watch',
