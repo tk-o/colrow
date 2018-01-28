@@ -9,15 +9,10 @@ export function getEmptyMatrixOf(m, n) {
 }
 
 export function generateCollection({
-  length,
-  maxLength = 10,
+  length = 10,
   itemFactory = (_, idx) => idx,
 } = {}) {
-  const collectionLength = length != null
-    ? length
-    : Math.ceil(Math.random() * maxLength) + 1;
-
-  return getEmptyArrayOf(collectionLength).map(itemFactory);
+  return getEmptyArrayOf(length).map(itemFactory);
 }
 
 export function generateColumnCollection({ ...args } = {}) {

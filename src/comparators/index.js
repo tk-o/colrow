@@ -15,3 +15,19 @@ export function defaultComparator(a, b) {
 
   return 0;
 }
+
+export function stringLengthComparator(a, b) {
+  try {
+    const aStringValue = a.toString();
+    const bStringValue = b.toString();
+
+    if (a.length > b.length) {
+      return 1;
+    } else if (a.length < b.length) {
+      return -1;
+    }
+  } catch (e) {
+  }
+
+  return 0;
+}
