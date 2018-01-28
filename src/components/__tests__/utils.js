@@ -1,4 +1,4 @@
-test();
+test(() => assert.always());
 
 export function getEmptyArrayOf(n) {
   return Array(n).fill();
