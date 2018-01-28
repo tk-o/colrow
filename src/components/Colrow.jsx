@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pipe } from 'ramda';
+import { pipe, curry } from 'ramda';
 
 import { defaultComparator } from '../comparators';
 import { noop } from '../utils';
+
+export const SortingDirection = Object.freeze({
+  ASC: 'asc',
+  DESC: 'desc',
+});
 
 export default class Colrow extends Component {
   static propTypes = {
@@ -13,16 +18,28 @@ export default class Colrow extends Component {
     rows: PropTypes.arrayOf(
       PropTypes.any,
     ),
+    sortingColumnIdx: PropTypes.number,
+    sortingColumnDirection: PropTypes.oneOf(
+      [SortingDirection.ASC, SortingDirection.DESC]
+    )
   }
 
   static defaultProps = {
     render: DefaultRenderer,
+    sortByColumnIdx: -1,
+    sortDirection: null,
+    onSorting: noop,
+    onSorted: noop,
   }
 
   state = {
     visibleRows: this.props.rows,
     rows: this.props.rows,
     columns: this.props.columns,
+    sorting: {
+      columnIdx: this.props.sortByColumnIdx,
+      direction: this.props.sortDirection,
+    },
   }
 
   render() {
@@ -38,6 +55,7 @@ export default class Colrow extends Component {
   getTableProps = () => {
     const {
       state,
+      sort,
     } = this;
     const {
       rows,
@@ -45,7 +63,8 @@ export default class Colrow extends Component {
       visibleRows,
     } = state;
 
-    const propsGetters = {
+    const actions = {
+      sort,
     };
     const stateItems = {
       rows,
@@ -54,11 +73,56 @@ export default class Colrow extends Component {
     };
 
     const tableProps = {
-      ...propsGetters,
+      ...actions,
       ...stateItems,
     };
 
     return tableProps;
+  }
+
+  sort = ({ columnIdx = -1, direction = null }) => {
+    const beforeSort = pipe(
+      this.onSorting,
+      this.props.onSorting,
+    );
+
+    const afterSort = pipe(
+      this.onSorted,
+      this.props.onSorted,
+    );
+
+    const sorting = { ...this.state.sorting };
+    const opositDirection = sorting.direction !== SortingDirection.ASC
+      ? SortingDirection.ASC
+      : SortingDirection.DESC;
+
+    const nextSorting = {
+      columnIdx,
+      direction: direction != null
+        ? direction
+        : opositDirection,
+    };
+
+    beforeSort({ sorting, nextSorting });
+
+    // real sorting part
+    this.setState(() => ({
+      sorting: nextSorting,
+    }), () => {
+      afterSort({ prevSorting: sorting, sorting: nextSorting });
+    });
+  }
+
+  onSorting = (sortingState) => {
+    const { sorting, nextSorting } = sortingState;
+
+    return sortingState;
+  }
+
+  onSorted = (sortingState) => {
+    const { prevSorting, sorting } = sortingState;
+
+    return sortingState;
   }
 }
 

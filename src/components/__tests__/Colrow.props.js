@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { generateCollection, generateColumnCollection } from './utils';
-import Colrow from '../Colrow';
+import Colrow, { SortingDirection } from '../Colrow';
 
 test('component should not throw for valid render prop', () => {
   const validRenderer = () => <div />;
@@ -34,7 +34,7 @@ test('handler returns columns', () => {
   });
 
   expect(Array.isArray(outputColumns)).toBeTruthy();
-  expect(outputColumns.length).toEqual(inputColumns.length);
+  expect(outputColumns).toHaveLength(inputColumns.length);
 });
 
 test('handler returns rows', () => {
@@ -44,7 +44,7 @@ test('handler returns rows', () => {
   });
 
   expect(Array.isArray(outputRows)).toBeTruthy();
-  expect(outputRows.length).toEqual(inputRows.length);
+  expect(outputRows).toHaveLength(inputRows.length);
 });
 
 test('handler returns visible rows', () => {
@@ -53,8 +53,8 @@ test('handler returns visible rows', () => {
     visibleRows,
     rows: outputRows,
   } = setup({
-    rows: inputRows,
-  });
+      rows: inputRows,
+    });
 
   expect(Array.isArray(visibleRows)).toBeTruthy();
   const areVisibleRowsSubsetOfAllRows = Boolean(visibleRows.length) && visibleRows.every(
@@ -63,17 +63,83 @@ test('handler returns visible rows', () => {
   expect(areVisibleRowsSubsetOfAllRows).toBeTruthy();
 });
 
+test('handler returns `sort` action', () => {
+  const {
+    renderSpy,
+    sort,
+  } = setup();
+
+  expect(typeof sort === 'function').toBeTruthy();
+});
+
+test('`sort` action should call `onSorting` and then `onSorted` actions', () => {
+  const onSortingSpy = jest.fn();
+  const onSortedSpy = jest.fn();
+
+  const { sort } = setup({
+    onSorting: onSortingSpy,
+    onSorted: onSortedSpy,
+  });
+
+  sort({ columnIdx: 0, direction: SortingDirection.ASC });
+
+  expect(onSortingSpy).toHaveBeenCalledTimes(1);
+  expect(onSortedSpy).toHaveBeenCalledTimes(1);
+});
+
+test('`sort` action should change sort direction to the opposite to current one', () => {
+  const onSortedSpy = jest.fn();
+  const { sort } = setup({
+    onSorted: onSortedSpy,
+  });
+
+  expect.assertions(3);
+
+  sort({ columnIdx: 0 });
+  expect(onSortedSpy).toHaveBeenLastCalledWith({
+    prevSorting: {
+      columnIdx: -1,
+      direction: null,
+    },
+    sorting: {
+      columnIdx: 0,
+      direction: SortingDirection.ASC,
+    },
+  });
+
+  sort({ columnIdx: 0 });
+  expect(onSortedSpy).toHaveBeenLastCalledWith({
+    prevSorting: {
+      columnIdx: 0,
+      direction: SortingDirection.ASC,
+    },
+    sorting: {
+      columnIdx: 0,
+      direction: SortingDirection.DESC,
+    },
+  });
+
+  sort({ columnIdx: 0 });
+  expect(onSortedSpy).toHaveBeenLastCalledWith({
+    prevSorting: {
+      columnIdx: 0,
+      direction: SortingDirection.DESC,
+    },
+    sorting: {
+      columnIdx: 0,
+      direction: SortingDirection.ASC,
+    },
+  });
+});
+
 function setup({
   render = () => <div />,
   columns = generateColumnCollection({ maxLength: 1 }),
   ...props,
 } = {}) {
-  let renderProps;
-  const renderSpy = jest.fn(renderArgs => {
-    renderProps = renderArgs
-    return render(renderProps);
-  });
+  const renderSpy = jest.fn(render);
   const wrapper = shallow(<Colrow render={renderSpy} columns={columns} {...props} />);
+  const renderProps = renderSpy.mock.calls[0][0];
 
   return { wrapper, renderSpy, ...renderProps };
 }
