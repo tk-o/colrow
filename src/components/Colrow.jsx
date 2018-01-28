@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 import { pipe, curry } from 'ramda';
 
 import { defaultComparator } from '../comparators';
-import { noop } from '../utils';
+import noop from '../utils/noop';
+import sorter, { SortingDirection } from '../utils/sorter';
 
-export const SortingDirection = Object.freeze({
-  ASC: 'asc',
-  DESC: 'desc',
-});
 
 export default class Colrow extends Component {
   static propTypes = {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { generateCollection, generateColumnCollection } from './utils';
-import Colrow, { SortingDirection } from '../Colrow';
+import Colrow from '../Colrow';
+import { SortingDirection } from '../../utils/sorter';
 
 test('component should not throw for valid render prop', () => {
   const validRenderer = () => <div />;

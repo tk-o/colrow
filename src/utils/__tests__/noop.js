@@ -1,4 +1,4 @@
-import { noop } from '../';
+import noop from '../noop';
 
 describe('noop', () => {
   it('is a function', () => {
