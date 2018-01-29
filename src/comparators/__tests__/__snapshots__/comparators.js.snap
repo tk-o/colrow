@@ -30,6 +30,7 @@ Array [
 
 exports[`sorting strings 1`] = `
 Array [
+  null,
   "",
   " ",
   "_acd",
@@ -37,13 +38,13 @@ Array [
   "aecd",
   "bac",
   "bbc",
-  null,
   undefined,
 ]
 `;
 
 exports[`sorting strings 2`] = `
 Array [
+  null,
   "",
   " ",
   "bac",
@@ -51,7 +52,6 @@ Array [
   "abcd",
   "aecd",
   "_acd",
-  null,
   undefined,
 ]
 `;

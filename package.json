@@ -7,9 +7,10 @@
   "author": "Tomasz Kopacki <tomasz@kopacki.net>",
   "license": "MIT",
   "jest": {
-    "cacheDirectory": "./node_modules/.cache",
+    "cacheDirectory": "node_modules/.cache",
+    "coverageDirectory": "coverage",
     "collectCoverageFrom": [
-      "src/*.(jsx|jsx)"
+      "src/**/*.{js,jsx}"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/config/setupTests.js"
   },

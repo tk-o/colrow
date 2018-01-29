@@ -6,7 +6,6 @@ import { defaultComparator } from '../comparators';
 import noop from '../utils/noop';
 import sorter, { SortingDirection } from '../utils/sorter';
 
-
 export default class Colrow extends Component {
   static propTypes = {
     columns: PropTypes.arrayOf(
@@ -18,7 +17,8 @@ export default class Colrow extends Component {
     sortingColumnIdx: PropTypes.number,
     sortingColumnDirection: PropTypes.oneOf(
       [SortingDirection.ASC, SortingDirection.DESC]
-    )
+    ),
+    isLoading: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -27,6 +27,9 @@ export default class Colrow extends Component {
     sortDirection: null,
     onSorting: noop,
     onSorted: noop,
+    onLoading: noop,
+    onLoaded: noop,
+    isLoading: false,
   }
 
   state = {
@@ -39,11 +42,24 @@ export default class Colrow extends Component {
     },
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { isLoading } = this.props;
+    const hasToggledLogging = isLoading !== nextProps.isLoading;
+
+    if (hasToggledLogging) {
+      if (nextProps.isLoading) {
+        this.onLoading();
+      } else {
+        this.onLoaded();
+      }
+    }
+  }
+
   render() {
     const { render, ...props = {} } = this.props;
 
     if (typeof render !== 'function') {
-      throw new Error('`render` prop should be a React component factory');
+      throw TypeError('`render` prop should be a React component factory');
     }
 
     return render(this.getTableProps());
@@ -120,6 +136,14 @@ export default class Colrow extends Component {
     const { prevSorting, sorting } = sortingState;
 
     return sortingState;
+  }
+
+  onLoading = () => {
+    this.props.onLoading();
+  }
+
+  onLoaded = () => {
+    this.props.onLoaded();
   }
 }
 
