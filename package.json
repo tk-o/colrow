@@ -7,6 +7,9 @@
   "author": "Tomasz Kopacki <tomasz@kopacki.net>",
   "license": "MIT",
   "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
     "cacheDirectory": "node_modules/.cache",
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
@@ -21,6 +24,8 @@
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
+    "babel-core": "6.26.0",
+    "babel-jest": "22.1.0",
     "babel-plugin-syntax-object-rest-spread": "6.13.0",
     "babel-plugin-transform-class-properties": "6.24.1",
     "babel-preset-env": "1.6.1",
@@ -33,8 +38,11 @@
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "7.6.0",
     "jest": "22.1.4",
+    "jest-junit": "3.4.1",
+    "nps": "5.7.1",
     "nps-utils": "1.5.0",
     "parcel-bundler": "1.5.0",
-    "prop-types": "15.6.0"
+    "prop-types": "15.6.0",
+    "regenerator-runtime": "0.11.1"
   }
 }
