@@ -99,33 +99,18 @@ export default class Colrow extends Component {
   }
 
   sort = ({ columnIdx = -1, direction = null }) => {
-    const beforeSort = pipe(
-      this.onSorting,
-      this.props.onSorting,
-    );
-
-    const afterSort = pipe(
-      this.onSorted,
-      this.props.onSorted,
-    );
-
-    const { sorting, columns } = this.state;
     const { comparator: tableComparator, rows: collection } = this.props;
+    const { sorting, columns } = this.state;
+    const nextSorting = getNextSorting({
+      columnIdx,
+      direction: sorting.direction,
+      requestedDirection: direction,
+    });
     const columnToSort = columns[columnIdx];
     const comparator = columnToSort.comparator || tableComparator;
     const itemKey = columnToSort.itemKey || columnIdx;
-    const opositDirection = sorting.direction !== SortingDirection.ASC
-      ? SortingDirection.ASC
-      : SortingDirection.DESC;
 
-    const nextSorting = {
-      columnIdx,
-      direction: direction != null
-        ? direction
-        : opositDirection,
-    };
-
-    beforeSort({ sorting, nextSorting });
+    this.props.onSorting({ sorting, nextSorting });
 
     const sortedRows = sort({
       collection,
@@ -138,20 +123,8 @@ export default class Colrow extends Component {
       sorting: nextSorting,
       rows: sortedRows,
     }), () => {
-      afterSort({ prevSorting: sorting, sorting: nextSorting });
+      this.props.onSorted({ prevSorting: sorting, sorting: nextSorting });
     });
-  }
-
-  onSorting = (sortingState) => {
-    const { sorting, nextSorting } = sortingState;
-
-    return sortingState;
-  }
-
-  onSorted = (sortingState) => {
-    const { prevSorting, sorting } = sortingState;
-
-    return sortingState;
   }
 
   checkLoadingState = (prevIsLoading, nextIsLoading) => {
@@ -159,20 +132,29 @@ export default class Colrow extends Component {
 
     if (hasToggledLogging) {
       if (nextIsLoading) {
-        this.onLoading();
+        this.props.onLoading();
       } else {
-        this.onLoaded();
+        this.props.onLoaded();
       }
     }
   }
+}
 
-  onLoading = () => {
-    this.props.onLoading();
-  }
+function getNextSorting({
+  columnIdx,
+  direction,
+  requestedDirection,
+}) {
+  const opositDirection = direction !== SortingDirection.ASC
+    ? SortingDirection.ASC
+    : SortingDirection.DESC;
 
-  onLoaded = () => {
-    this.props.onLoaded();
-  }
+  return {
+    columnIdx,
+    direction: requestedDirection != null
+      ? requestedDirection
+      : opositDirection,
+  };
 }
 
 function DefaultRenderer(params) {

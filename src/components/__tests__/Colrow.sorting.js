@@ -73,17 +73,9 @@ test('`sort` action should change sort direction to the opposite to current one'
 
 test('use custom sorter if defined for the column', () => {
   const columns = [
-    {
-      name: 'Column 1',
-    },
-    {
-      name: 'Column 2',
-      comparator: stringLengthComparator,
-    },
-    {
-      name: 'Column 3',
-      comparator: wordsCountComparator,
-    }
+    { name: 'Column 1' },
+    { name: 'Column 2', comparator: stringLengthComparator },
+    { name: 'Column 3', comparator: wordsCountComparator },
   ];
 
   const rows = [
