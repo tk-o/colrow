@@ -42,6 +42,7 @@ jobs:
       # run tests!
       - run:
           name: Jest Suite
-          command: yarn jest tests --ci --testResultsProcessor="jest-junit"
+          command: yarn jest tests --ci --testResultsProcessor="jest-junit" --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+
           environment:
             JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
