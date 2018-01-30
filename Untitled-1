@@ -1,0 +1,44 @@
+table
+- props
+    - comparator
+    - rows
+    - columns
+    - onSorting
+    - onSorted
+    - onLoading
+    - onLoaded
+- render props
+    - sort (curried)
+    - sortIdx,
+    - sortDirection,
+    - loadPage
+    - pageSize
+    - pageIdx
+    - visibleRows
+    - rowsTotal
+
+header
+- props
+    - columns
+    - sortIdx,
+    - sortDirection,
+- render props
+    - sortDirection
+
+body
+- props
+    - rows (displayedRows)
+    - columns
+- render props
+    -
+
+footer
+- props
+    - loadPage
+    - totalRows
+    - pageSize
+    - pageIdx
+- render props
+    -
+
+

@@ -18,14 +18,22 @@ export function defaultComparator(a, b) {
 
 export function stringLengthComparator(a, b) {
   try {
-    const aStringValue = a.toString();
-    const bStringValue = b.toString();
+    const aStringLength = a.toString().length;
+    const bStringLength = b.toString().length;
 
-    if (a.length > b.length) {
-      return 1;
-    } else if (a.length < b.length) {
-      return -1;
-    }
+    return defaultComparator(aStringLength, bStringLength);
+  } catch (e) {
+  }
+
+  return 0;
+}
+
+export function wordsCountComparator(a, b) {
+  try {
+    const aWordsCount = a.toString().split(' ').length;
+    const bWordsCount = b.toString().split(' ').length;
+
+    return defaultComparator(aWordsCount, bWordsCount);
   } catch (e) {
   }
 

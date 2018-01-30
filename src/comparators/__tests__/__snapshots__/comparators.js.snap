@@ -16,6 +16,20 @@ Array [
 
 exports[`sorting numbers 2`] = `
 Array [
+  0,
+  1.23,
+  -0.43,
+  Infinity,
+  -Infinity,
+  123235235234,
+  -1234322343432,
+  null,
+  undefined,
+]
+`;
+
+exports[`sorting numbers 3`] = `
+Array [
   1.23,
   -0.43,
   123235235234,
@@ -52,6 +66,20 @@ Array [
   "abcd",
   "aecd",
   "_acd",
+  undefined,
+]
+`;
+
+exports[`sorting strings 3`] = `
+Array [
+  null,
+  "bac",
+  "abcd",
+  "aecd",
+  "_acd",
+  "bbc",
+  "",
+  " ",
   undefined,
 ]
 `;

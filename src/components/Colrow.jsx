@@ -4,7 +4,7 @@ import { pipe, curry } from 'ramda';
 
 import { defaultComparator } from '../comparators';
 import noop from '../utils/noop';
-import sorter, { SortingDirection } from '../utils/sorter';
+import sort, { SortingDirection } from '../utils/sorter';
 
 export default class Colrow extends Component {
   static propTypes = {
@@ -14,15 +14,23 @@ export default class Colrow extends Component {
     rows: PropTypes.arrayOf(
       PropTypes.any,
     ),
+    render: PropTypes.func,
+    comparator: PropTypes.func,
     sortingColumnIdx: PropTypes.number,
     sortingColumnDirection: PropTypes.oneOf(
       [SortingDirection.ASC, SortingDirection.DESC]
     ),
+    onSorting: PropTypes.func,
+    onSorted: PropTypes.func,
+    onLoading: PropTypes.func,
+    onLoaded: PropTypes.func,
     isLoading: PropTypes.bool,
   }
 
   static defaultProps = {
+    rows: [],
     render: DefaultRenderer,
+    comparator: defaultComparator,
     sortByColumnIdx: -1,
     sortDirection: null,
     onSorting: noop,
@@ -42,17 +50,14 @@ export default class Colrow extends Component {
     },
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { isLoading } = this.props;
-    const hasToggledLogging = isLoading !== nextProps.isLoading;
-
-    if (hasToggledLogging) {
-      if (nextProps.isLoading) {
-        this.onLoading();
-      } else {
-        this.onLoaded();
-      }
+  componentDidMount() {
+    if (this.state.columns.length === 0) {
+      throw Error('At least one column definition must be provided');
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.checkLoadingState(this.props.isLoading, nextProps.isLoading);
   }
 
   render() {
@@ -104,7 +109,11 @@ export default class Colrow extends Component {
       this.props.onSorted,
     );
 
-    const sorting = { ...this.state.sorting };
+    const { sorting, columns } = this.state;
+    const { comparator: tableComparator, rows: collection } = this.props;
+    const columnToSort = columns[columnIdx];
+    const comparator = columnToSort.comparator || tableComparator;
+    const itemKey = columnToSort.itemKey || columnIdx;
     const opositDirection = sorting.direction !== SortingDirection.ASC
       ? SortingDirection.ASC
       : SortingDirection.DESC;
@@ -118,9 +127,16 @@ export default class Colrow extends Component {
 
     beforeSort({ sorting, nextSorting });
 
-    // real sorting part
+    const sortedRows = sort({
+      collection,
+      itemKey,
+      comparator,
+      direction,
+    });
+
     this.setState(() => ({
       sorting: nextSorting,
+      rows: sortedRows,
     }), () => {
       afterSort({ prevSorting: sorting, sorting: nextSorting });
     });
@@ -136,6 +152,18 @@ export default class Colrow extends Component {
     const { prevSorting, sorting } = sortingState;
 
     return sortingState;
+  }
+
+  checkLoadingState = (prevIsLoading, nextIsLoading) => {
+    const hasToggledLogging = prevIsLoading !== nextIsLoading;
+
+    if (hasToggledLogging) {
+      if (nextIsLoading) {
+        this.onLoading();
+      } else {
+        this.onLoaded();
+      }
+    }
   }
 
   onLoading = () => {

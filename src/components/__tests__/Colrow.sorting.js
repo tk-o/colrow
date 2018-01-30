@@ -1,4 +1,9 @@
-import { setup, SortingDirection } from './Colrow';
+import {
+  setup,
+  SortingDirection,
+  stringLengthComparator,
+  wordsCountComparator,
+} from './Colrow';
 
 test('handler returns `sort` action', () => {
   const { sort } = setup();
@@ -63,5 +68,50 @@ test('`sort` action should change sort direction to the opposite to current one'
       columnIdx: 0,
       direction: SortingDirection.ASC,
     },
+  });
+});
+
+test('use custom sorter if defined for the column', () => {
+  const columns = [
+    {
+      name: 'Column 1',
+    },
+    {
+      name: 'Column 2',
+      comparator: stringLengthComparator,
+    },
+    {
+      name: 'Column 3',
+      comparator: wordsCountComparator,
+    }
+  ];
+
+  const rows = [
+    [1, 'abcdefg',  'a few very short words...'],
+    [2, 'a',        'a few very short words to...'],
+    [3, 'abcdef',   'a few...'],
+    [4, 'abcd',     'a...'],
+    [5, 'abc',      'a few very short words to read'],
+  ];
+
+  const columnsSorting = [
+    [0, SortingDirection.DESC, [5, 4, 3, 2, 1]],
+    [1, SortingDirection.ASC, ['a', 'abc', 'abcd', 'abcdef', 'abcdefg']],
+    [2, SortingDirection.ASC, ['a...', 'a few...', 'a few very short words...', 'a few very short words to...', 'a few very short words to read']],
+  ];
+
+  expect.assertions(columnsSorting.length);
+
+  columnsSorting.forEach(columnSorting => {
+    const [columnIdx, direction, expectedSortedColumnState] = columnSorting;
+    const { sort, wrapper } = setup({
+      columns: [...columns],
+      rows: [...rows],
+    });
+
+    sort({ columnIdx, direction });
+
+    const sortedColumnState = wrapper.state().rows.map(row => row[columnIdx]);
+    expect(sortedColumnState).toMatchObject(expectedSortedColumnState);
   });
 });

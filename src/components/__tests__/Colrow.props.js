@@ -10,13 +10,16 @@ test('component should not throw for valid render prop', () => {
 
 test('component should throw for invalid render prop', () => {
   const invalidRenderers = [null, false, 1, '2', Math.PI, [], 8];
+  const consoleErrorSpy = jest.spyOn(console, 'error')
+    .mockImplementation(() => {});
 
-  expect.assertions(invalidRenderers.length);
+  expect.assertions(invalidRenderers.length + 1);
   invalidRenderers.forEach(invalidRenderer => {
     expect(() => {
       setup({ render: invalidRenderer })
     }).toThrow(TypeError);
   });
+  expect(consoleErrorSpy).toHaveBeenCalled();
 });
 
 test('render prop handler is being called', () => {

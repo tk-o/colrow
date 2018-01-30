@@ -1,11 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Colrow from '../Colrow';
-import { SortingDirection } from '../../utils/sorter';
+export { SortingDirection } from '../../utils/sorter';
+export * from '../../comparators';
 
-test(() => assertion.always());
-
-export { SortingDirection };
+test('Colrow requires at least one column passed via props', () => {
+  expect(() => setup({ columns: [] })).toThrow(Error);
+  expect(() => setup({ columns: [{}] })).not.toThrow(Error);
+});
 
 export function setup({
   render = Colrow.defaultProps.render,
