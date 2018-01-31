@@ -3,15 +3,26 @@ export default function sort({
   direction,
   collection,
   itemKey,
-}) {
-  const sortedCollection = [...collection].sort((a, b) => {
-    const valueA = a[itemKey];
-    const valueB = b[itemKey];
+  valueResolver,
+} = {}) {
+  if (!Array.isArray(collection)) {
+    throw TypeError('Input collection needs to be provied as an array');
+  }
 
-    return typeof comparator === 'function'
-      ? comparator(valueA, valueB)
-      : 0;
-  });
+  if (typeof comparator !== 'function') {
+    return collection;
+  }
+
+  const resolveValue = typeof valueResolver === 'function'
+    ? valueResolver
+    : (item) => item[itemKey];
+
+  const sortedCollection = collection.sort((a, b) =>
+    comparator(
+      resolveValue(a),
+      resolveValue(b),
+    )
+  );
 
   return direction !== SortingDirection.DESC
     ? sortedCollection

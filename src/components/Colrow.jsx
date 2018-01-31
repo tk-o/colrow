@@ -63,10 +63,6 @@ export default class Colrow extends Component {
   render() {
     const { render, ...props = {} } = this.props;
 
-    if (typeof render !== 'function') {
-      throw TypeError('`render` prop should be a React component factory');
-    }
-
     return render(this.getTableProps());
   }
 

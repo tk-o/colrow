@@ -3,6 +3,19 @@ import { zipObj } from 'ramda';
 import sort, { SortingDirection } from '../sorter';
 import { defaultComparator, stringLengthComparator } from '../../comparators';
 
+test('sorter requires input collection', () => {
+  expect(() => {
+    sort();
+  }).toThrow(TypeError);
+});
+
+test('sorter returns input collection on output if comparator is not provided', () => {
+  const notSortedCollection = [1, 2, 3];
+  const stillNotSortedCollection = sort({ collection: notSortedCollection });
+
+  expect(stillNotSortedCollection).toMatchObject(notSortedCollection);
+});
+
 test('sorter returns collection of the same length as input one', () => {
   const notSortedCollection = [1, 2, 3];
   const sortedCollection = sort({ collection: notSortedCollection });
@@ -79,6 +92,26 @@ test('sorter uses custom comparator', () => {
 
     expect(actualCollection).toMatchObject(expectedCollection);
   });
+});
+
+test.only('sorter uses custom value resolver over itemKey if resolver function is provided', () => {
+  const collection = [
+    { stringNumber: '11' },
+    { stringNumber: '2' },
+    { stringNumber: '1' },
+    { stringNumber: '22' },
+  ];
+  const expectedCollection = ['1', '2', '11', '22'];
+
+  const actualCollection = sort({
+    itemKey: 'stringNumber',
+    valueResolver: (item) => parseInt(item.stringNumber, 10),
+    comparator: defaultComparator,
+    direction: SortingDirection.ASC,
+    collection,
+  }).map(({ stringNumber }) => stringNumber);
+
+  expect(actualCollection).toMatchObject(expectedCollection);
 });
 
 function sortAndExtractColumn({ collection, itemKey, comparator = defaultComparator }) {
