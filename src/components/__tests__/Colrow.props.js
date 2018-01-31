@@ -1,5 +1,5 @@
 import React from 'react';
-import Colrow, { setup, generateCollection, generateColumnCollection } from './Colrow';
+import { setup, generateCollection, generateColumnCollection } from './Colrow';
 
 test('component should not throw for valid render prop', () => {
   const validRenderer = () => <div />;
@@ -10,7 +10,7 @@ test('component should not throw for valid render prop', () => {
 
 test('component should throw for invalid render prop', () => {
   const invalidRenderers = [null, false, 1, '2', Math.PI, [], 8];
-  const consoleErrorSpy = jest.spyOn(console, 'error')
+  const consoleErrorSpy = jest.spyOn(global.console, 'error')
     .mockImplementation(() => {});
 
   expect.assertions(invalidRenderers.length + 1);
@@ -23,7 +23,7 @@ test('component should throw for invalid render prop', () => {
 });
 
 test('render prop handler is being called', () => {
-  const { wrapper, renderSpy } = setup();
+  const { renderSpy } = setup();
 
   expect(renderSpy).toHaveBeenCalled();
 });

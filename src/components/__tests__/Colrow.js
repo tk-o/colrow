@@ -12,7 +12,7 @@ test('Colrow requires at least one column passed via props', () => {
 export function setup({
   render = Colrow.defaultProps.render,
   columns = generateColumnCollection({ maxLength: 1 }),
-  ...props,
+  ...props
 } = {}) {
   const renderSpy = typeof render === 'function' ? jest.fn(render) : render;
   const wrapper = shallow(<Colrow render={renderSpy} columns={columns} {...props} />);
@@ -26,7 +26,7 @@ export function getEmptyArrayOf(n) {
 }
 
 export function getEmptyMatrixOf(m, n) {
-  return getEmptyArrayOf(m).map(_ => getEmptyArrayOf(n));
+  return getEmptyArrayOf(m).map(() => getEmptyArrayOf(n));
 }
 
 export function generateCollection({

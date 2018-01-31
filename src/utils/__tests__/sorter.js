@@ -47,7 +47,7 @@ test('sorter can sort collection of objects', () => {
     notSortedCollection,
     sortedColumnMap,
   } = setupSortData({
-      objectKeys: ['x', 'y', 'z']
+      objectKeys: ['x', 'y', 'z'],
     });
 
   Object.entries(sortedColumnMap).forEach(([itemKey, expectedCollection]) => {
@@ -81,7 +81,7 @@ test('sorter uses custom comparator', () => {
     notSortedCollection,
     sortedColumnMap,
   } = setupSortData({
-      customComparators: [undefined, undefined, stringLengthComparator]
+      customComparators: [undefined, undefined, stringLengthComparator],
   });
 
   sortedColumnMap.forEach((expectedCollection, idx) => {
@@ -94,7 +94,7 @@ test('sorter uses custom comparator', () => {
   });
 });
 
-test.only('sorter uses custom value resolver over itemKey if resolver function is provided', () => {
+test('sorter uses custom value resolver over itemKey if resolver function is provided', () => {
   const collection = [
     { stringNumber: '11' },
     { stringNumber: '2' },

@@ -20,7 +20,7 @@ export default function sort({
   const sortedCollection = collection.sort((a, b) =>
     comparator(
       resolveValue(a),
-      resolveValue(b),
+      resolveValue(b)
     )
   );
 

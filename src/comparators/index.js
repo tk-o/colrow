@@ -23,9 +23,8 @@ export function stringLengthComparator(a, b) {
 
     return defaultComparator(aStringLength, bStringLength);
   } catch (e) {
+    return 0;
   }
-
-  return 0;
 }
 
 export function wordsCountComparator(a, b) {
@@ -35,7 +34,6 @@ export function wordsCountComparator(a, b) {
 
     return defaultComparator(aWordsCount, bWordsCount);
   } catch (e) {
+    return 0;
   }
-
-  return 0;
 }
