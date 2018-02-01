@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pipe, curry } from 'ramda';
+import { slice } from 'ramda';
 
 import { defaultComparator } from '../comparators';
 import noop from '../utils/noop';
@@ -25,6 +25,8 @@ export default class Colrow extends Component {
     onLoading: PropTypes.func,
     onLoaded: PropTypes.func,
     isLoading: PropTypes.bool,
+    pageSize: PropTypes.number,
+    pageNo: PropTypes.number,
   }
 
   static defaultProps = {
@@ -38,10 +40,16 @@ export default class Colrow extends Component {
     onLoading: noop,
     onLoaded: noop,
     isLoading: false,
+    pageSize: Infinity,
+    pageNo: 1,
   }
 
   state = {
-    visibleRows: this.props.rows,
+    visibleRows: extractVisibleRows({
+      rows: this.props.rows,
+      pageNo: this.props.pageNo,
+      pageSize: this.props.pageSize,
+    }),
     rows: this.props.rows,
     columns: this.props.columns,
     sorting: {
@@ -95,7 +103,11 @@ export default class Colrow extends Component {
   }
 
   sort = ({ columnIdx = -1, direction = null }) => {
-    const { comparator: tableComparator, rows: collection } = this.props;
+    const {
+      pageSize,
+      comparator: tableComparator,
+      rows: collection,
+    } = this.props;
     const { sorting, columns } = this.state;
     const nextSorting = getNextSorting({
       columnIdx,
@@ -115,12 +127,25 @@ export default class Colrow extends Component {
       direction,
     });
 
-    this.setState(() => ({
+    this.onSorted({
+      sortedRows,
+      pageSize,
+      prevSorting: sorting,
       sorting: nextSorting,
-      rows: sortedRows,
-    }), () => {
-      this.props.onSorted({ prevSorting: sorting, sorting: nextSorting });
     });
+  }
+
+  onSorted = ({ pageSize, prevSorting, sorting, sortedRows: rows }) => {
+    const visibleRows = extractVisibleRows({ rows, from: 0, to: pageSize });
+
+    this.setState(
+      () => ({
+        sorting,
+        visibleRows,
+        rows,
+      }),
+      () => this.props.onSorted({ prevSorting, sorting }),
+    );
   }
 
   checkLoadingState = (prevIsLoading, nextIsLoading) => {
@@ -151,6 +176,25 @@ function getNextSorting({
       ? requestedDirection
       : opositDirection,
   };
+}
+
+function extractVisibleRows({ pageNo, pageSize, rows }) {
+  if (!isFinite(pageSize)) {
+    return rows;
+  }
+
+  const from = evaluateFirstRowIdx(pageNo, pageSize);
+  const to = evaluateLastRowIdx(pageNo, pageSize);
+
+  return slice(from, to, rows);
+}
+
+function evaluateFirstRowIdx(pageNo, pageSize) {
+  return (pageNo - 1) * pageSize;
+}
+
+function evaluateLastRowIdx(pageNo, pageSize) {
+  return evaluateFirstRowIdx(pageNo, pageSize) + pageSize;
 }
 
 function DefaultRenderer(params) {
