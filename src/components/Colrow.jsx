@@ -198,5 +198,5 @@ function evaluateLastRowIdx(pageNo, pageSize) {
 }
 
 function DefaultRenderer(params) {
-  return <div />
+  return <div>Default</div>
 }

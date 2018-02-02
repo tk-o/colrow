@@ -42,6 +42,37 @@ test('sorter returns collection using proper direction', () => {
   expect(sortedCollection).toMatchObject(notSortedCollection);
 });
 
+test('sorter can use itemKey for both: not-nested and nested properties', () => {
+  const comparator = defaultComparator;
+  const collection = [
+    { x: { y: { z: 3 } }, a: 'c' },
+    { x: { y: { z: 2 } }, a: 'a' },
+    { x: { y: { z: 1 } }, a: 'b' },
+  ];
+
+  const notNestedExpected = [
+    { x: { y: { z: 1 } }, a: 'b' },
+    { x: { y: { z: 2 } }, a: 'a' },
+    { x: { y: { z: 3 } }, a: 'c' },
+  ];
+
+  const nestedExpected = [
+    { x: { y: { z: 2 } }, a: 'a' },
+    { x: { y: { z: 1 } }, a: 'b' },
+    { x: { y: { z: 3 } }, a: 'c' },
+  ];
+  const nestedProperty = 'x.y.z';
+  const notNestedProperty = 'a';
+
+  const notNestedResults = sort({ collection, comparator, itemKey: notNestedProperty });
+  const nestedResults = sort({ collection, comparator, itemKey: nestedProperty });
+
+  expect.assertions(2);
+  expect(notNestedResults).toMatchObject(notNestedExpected);
+  expect(nestedResults).toMatchObject(nestedResults);
+
+});
+
 test('sorter can sort collection of objects', () => {
   const {
     notSortedCollection,

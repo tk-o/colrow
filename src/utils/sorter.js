@@ -1,3 +1,5 @@
+import { path } from 'ramda';
+
 export default function sort({
   comparator,
   direction,
@@ -15,7 +17,7 @@ export default function sort({
 
   const resolveValue = typeof valueResolver === 'function'
     ? valueResolver
-    : (item) => item[itemKey];
+    : createDefaultValueResolver(itemKey);
 
   const sortedCollection = collection.sort((a, b) =>
     comparator(
@@ -33,3 +35,13 @@ export const SortingDirection = Object.freeze({
   ASC: 'asc',
   DESC: 'desc',
 });
+
+function createDefaultValueResolver(itemKey) {
+  return function defaultValueResolver(item) {
+    const itemKeyWrapped = typeof itemKey === 'string'
+      ? itemKey.split('.')
+      : [itemKey];
+
+    return path(itemKeyWrapped, item);
+  }
+}
