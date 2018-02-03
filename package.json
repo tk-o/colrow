@@ -15,6 +15,7 @@
   "author": "Tomasz Kopacki <tomasz@kopacki.net>",
   "license": "MIT",
   "scripts": {
+    "start": "nps",
     "test": "nps test.ci"
   },
   "babel": {

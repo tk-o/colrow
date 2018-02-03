@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <aside>
         <header>
-          <strong>List example (without <i>Symbol</i> column)</strong>
+          <h3>List example (without <i>Symbol</i> column)</h3>
         </header>
         <Colrow columns={columns}
           rows={rows}
@@ -26,7 +26,7 @@ class App extends Component {
     return (
       <aside>
         <header>
-          <strong>Table example (all columns)</strong>
+          <h3>Table example (all columns)</h3>
         </header>
         <Colrow columns={columns}
           rows={rows}
@@ -82,7 +82,7 @@ function renderList({ sort, rows, visibleRows, columns, getCellProps }) {
         {visibleRows.map((row, idx) => (
           <li key={idx}>
             <dl>
-              {columns.map((column, idx) => {
+              {columnsWithoutSymbol.map((column, idx) => {
                 const { value, sortingDirection } = getCellProps({ row, column, idx });
                 const { name } = column;
                 return (

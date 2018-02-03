@@ -1,9 +1,33 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+}
+
+main > header {
+  background: linear-gradient(#c0ece3, #7eddc8);
+  padding: 2rem 0;
+}
+
+.demo__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+
+  small {
+    font-size: 1.125rem;
+    font-style: italic;
+    opacity: 0.9;
+  }
+}
+
 section {
   display: flex;
 }
 
 aside {
   flex: 0 0 50%;
+  width: 50%;
 }
 
 [data-sorting] {
@@ -40,4 +64,29 @@ table {
   [data-sorting="desc"]::after {
     content: '↓'
   }
+}
+
+
+ol {
+  display: flex;
+  overflow-y: scroll;
+  padding: 0;
+}
+
+ol li {
+  border: 1px solid;
+  list-style-position: inside;
+}
+
+dl {
+  display: flex;
+  flex-wrap: wrap;
+  width: 200px;
+}
+
+dl > * {
+  flex: 0 0 50%;
+  width: 50%;
+  padding:0;
+  margin: 0;
 }
