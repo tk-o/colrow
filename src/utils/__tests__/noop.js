@@ -1,15 +1,14 @@
-import { noop } from '../';
+import noop from '../noop';
 
-describe('noop', () => {
-  it('is a function', () => {
-    const type = typeof noop;
-    expect(type).toBe('function');
-  });
+test('noop is a function', () => {
+  const type = typeof noop;
+  expect(type).toBe('function');
+});
 
-  it('returns undefined for any arguments', () => {
-    const input = ['', 'a', 0, 1.2345, {}, [], NaN, -Infinity, Symbol()];
-    const hasReturnedUndefined = input.map(noop)
-      .forEach(value => expect(value).toBeUndefined());
-    expect.assertions(input.length);
-  });
+test('noop returns undefined for any arguments', () => {
+  const input = ['', 'a', 0, 1.2345, {}, [], NaN, -Infinity, Symbol()];
+  const output = input.map(noop);
+
+  output.forEach(value => expect(value).toBeUndefined());
+  expect.assertions(input.length);
 });

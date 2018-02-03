@@ -6,6 +6,16 @@
   "plugins": [
     "react"
   ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "globals": {
+    "jest": false,
+    "test": false,
+    "expect": false
+  },
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module",
@@ -14,5 +24,8 @@
       "modules": true,
       "experimentalObjectRestSpread": true
     }
+  },
+  "rules": {
+    "comma-dangle": ["error", "always-multiline"]
   }
 }

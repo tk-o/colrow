@@ -10,7 +10,7 @@ function createComparatorTest(comparator) {
 
 function testComparator(assertInput) {
   test('sorting strings', () => {
-    assertInput(['bac', 'abcd', 'aecd', '_acd', 'bbc', '', ' ', null, undefined]);
+    assertInput([undefined, 'bac', 'abcd', 'aecd', '_acd', 'bbc', '', ' ', null]);
   });
 
   test('sorting numbers', () => {

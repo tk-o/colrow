@@ -15,3 +15,25 @@ export function defaultComparator(a, b) {
 
   return 0;
 }
+
+export function stringLengthComparator(a, b) {
+  try {
+    const aStringLength = a.toString().length;
+    const bStringLength = b.toString().length;
+
+    return defaultComparator(aStringLength, bStringLength);
+  } catch (e) {
+    return 0;
+  }
+}
+
+export function wordsCountComparator(a, b) {
+  try {
+    const aWordsCount = a.toString().split(' ').length;
+    const bWordsCount = b.toString().split(' ').length;
+
+    return defaultComparator(aWordsCount, bWordsCount);
+  } catch (e) {
+    return 0;
+  }
+}
