@@ -1,4 +1,4 @@
-import { setup } from './Colrow';
+import { setup } from './Colrow.main';
 
 test('should call `onLoading` action while changing in loading state', () => {
   const onLoadingSpy = jest.fn();

@@ -1,11 +1,12 @@
-import { path } from 'ramda';
+import { always } from 'ramda';
+import defaultValueResolver from './valueResolver';
 
 export default function sort({
   comparator,
   direction,
   collection,
   itemKey,
-  valueResolver,
+  valueResolver: resolveValue = defaultValueResolver,
 } = {}) {
   if (!Array.isArray(collection)) {
     throw TypeError('Input collection needs to be provied as an array');
@@ -14,15 +15,10 @@ export default function sort({
   if (typeof comparator !== 'function') {
     return collection;
   }
-
-  const resolveValue = typeof valueResolver === 'function'
-    ? valueResolver
-    : createDefaultValueResolver(itemKey);
-
   const sortedCollection = collection.sort((a, b) =>
     comparator(
-      resolveValue(a),
-      resolveValue(b)
+      resolveValue(a, itemKey),
+      resolveValue(b, itemKey)
     )
   );
 
@@ -35,13 +31,3 @@ export const SortingDirection = Object.freeze({
   ASC: 'asc',
   DESC: 'desc',
 });
-
-function createDefaultValueResolver(itemKey) {
-  return function defaultValueResolver(item) {
-    const itemKeyWrapped = typeof itemKey === 'string'
-      ? itemKey.split('.')
-      : [itemKey];
-
-    return path(itemKeyWrapped, item);
-  }
-}

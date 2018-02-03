@@ -2,6 +2,7 @@ import { zipObj } from 'ramda';
 
 import sort, { SortingDirection } from '../sorter';
 import { defaultComparator, stringLengthComparator } from '../../comparators';
+import defaulValueResolver from '../valueResolver';
 
 test('sorter requires input collection', () => {
   expect(() => {
@@ -40,37 +41,6 @@ test('sorter returns collection using proper direction', () => {
   });
 
   expect(sortedCollection).toMatchObject(notSortedCollection);
-});
-
-test('sorter can use itemKey for both: not-nested and nested properties', () => {
-  const comparator = defaultComparator;
-  const collection = [
-    { x: { y: { z: 3 } }, a: 'c' },
-    { x: { y: { z: 2 } }, a: 'a' },
-    { x: { y: { z: 1 } }, a: 'b' },
-  ];
-
-  const notNestedExpected = [
-    { x: { y: { z: 1 } }, a: 'b' },
-    { x: { y: { z: 2 } }, a: 'a' },
-    { x: { y: { z: 3 } }, a: 'c' },
-  ];
-
-  const nestedExpected = [
-    { x: { y: { z: 2 } }, a: 'a' },
-    { x: { y: { z: 1 } }, a: 'b' },
-    { x: { y: { z: 3 } }, a: 'c' },
-  ];
-  const nestedProperty = 'x.y.z';
-  const notNestedProperty = 'a';
-
-  const notNestedResults = sort({ collection, comparator, itemKey: notNestedProperty });
-  const nestedResults = sort({ collection, comparator, itemKey: nestedProperty });
-
-  expect.assertions(2);
-  expect(notNestedResults).toMatchObject(notNestedExpected);
-  expect(nestedResults).toMatchObject(nestedResults);
-
 });
 
 test('sorter can sort collection of objects', () => {
@@ -132,22 +102,29 @@ test('sorter uses custom value resolver over itemKey if resolver function is pro
     { stringNumber: '1' },
     { stringNumber: '22' },
   ];
-  const expectedCollection = ['1', '2', '11', '22'];
+  const expectedCollection = [1, 2, 11, 22];
+  const itemKey = 'stringNumber';
+  const valueResolver = (item) => parseInt(item.stringNumber, 10);
 
   const actualCollection = sort({
-    itemKey: 'stringNumber',
-    valueResolver: (item) => parseInt(item.stringNumber, 10),
+    valueResolver,
+    collection,
+    itemKey,
     comparator: defaultComparator,
     direction: SortingDirection.ASC,
-    collection,
-  }).map(({ stringNumber }) => stringNumber);
+  }).map((item) => valueResolver(item));
 
   expect(actualCollection).toMatchObject(expectedCollection);
 });
 
-function sortAndExtractColumn({ collection, itemKey, comparator = defaultComparator }) {
-  return sort({ collection, itemKey, comparator })
-    .map(item => item[itemKey]);
+function sortAndExtractColumn({
+  collection,
+  itemKey,
+  comparator = defaultComparator,
+  valueResolver = defaulValueResolver,
+}) {
+  return sort({ collection, itemKey, comparator, valueResolver })
+    .map(item => valueResolver(item, itemKey));
 }
 
 function setupSortData({

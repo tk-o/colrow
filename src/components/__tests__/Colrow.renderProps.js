@@ -1,5 +1,5 @@
 import React from 'react';
-import { setup, generateCollection, generateColumnCollection } from './Colrow';
+import { setup, generateCollection, generateColumnCollection } from './Colrow.main';
 
 test('component should not throw for valid render prop', () => {
   const validRenderer = () => <div />;
@@ -62,4 +62,14 @@ test('handler returns visible rows', () => {
     visibleRow => outputRows.includes(visibleRow)
   );
   expect(areVisibleRowsSubsetOfAllRows).toBeTruthy();
+});
+
+test('handler returns cell properties getter', () => {
+  const { renderSpy } = setup();
+
+  expect(renderSpy).toBeCalledWith(
+    expect.objectContaining({
+      getCellProps: expect.any(Function),
+    }),
+  );
 });

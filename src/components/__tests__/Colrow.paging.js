@@ -1,4 +1,4 @@
-import { generateCollection, setup } from './Colrow';
+import { generateCollection, setup } from './Colrow.main';
 
 test('it displays unlimited number of rows by default', () => {
   const rowsTotal = 100;

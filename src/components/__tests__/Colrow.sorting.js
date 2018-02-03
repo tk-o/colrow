@@ -3,7 +3,9 @@ import {
   SortingDirection,
   stringLengthComparator,
   wordsCountComparator,
-} from './Colrow';
+} from './Colrow.main';
+import defaultValueResolver from '../../utils/valueResolver';
+
 
 test('handler returns `sort` action', () => {
   const { sort } = setup();
@@ -24,9 +26,63 @@ test('`sort` action should call `onSorting` and then `onSorted` actions', () => 
 
   expect(onSortingSpy).toHaveBeenCalledTimes(1);
   expect(onSortedSpy).toHaveBeenCalledTimes(1);
+  expect(onSortingSpy.mock.timestamps[0]).not.toBeGreaterThan(onSortedSpy.mock.timestamps[0])
 });
 
-test('`sort` action should change sort direction to the opposite to current one', () => {
+
+test('`sort` action should not trigger sorter if sorting data is the same as previous one', () => {
+  const onSortedSpy = jest.fn();
+  const { sort } = setup({
+    onSorted: onSortedSpy,
+  });
+
+  sort({ columnIdx: 0, direction: SortingDirection.ASC });
+  expect(onSortedSpy).toHaveBeenCalled();
+  onSortedSpy.mockClear();
+
+  sort({ columnIdx: 0, direction: SortingDirection.ASC });
+  expect(onSortedSpy).not.toHaveBeenCalled();
+});
+
+test('`sort` action should change sort direction to the explicit direction when provided', () => {
+  const onSortedSpy = jest.fn();
+  const { sort } = setup({
+    onSorted: onSortedSpy,
+  });
+
+  expect.assertions(3);
+
+  sort({ columnIdx: 0, direction: SortingDirection.ASC });
+  expect(onSortedSpy).toHaveBeenCalledWith({
+    prevSorting: {
+      columnIdx: -1,
+      direction: null,
+    },
+    sorting: {
+      columnIdx: 0,
+      direction: SortingDirection.ASC,
+    },
+  });
+  onSortedSpy.mockClear();
+
+  sort({ columnIdx: 0, direction: SortingDirection.ASC });
+  expect(onSortedSpy).not.toHaveBeenCalled();
+  onSortedSpy.mockClear();
+
+  sort({ columnIdx: 0, direction: SortingDirection.DESC });
+  expect(onSortedSpy).toHaveBeenCalledWith({
+    prevSorting: {
+      columnIdx: 0,
+      direction: SortingDirection.ASC,
+    },
+    sorting: {
+      columnIdx: 0,
+      direction: SortingDirection.DESC,
+    },
+  });
+});
+
+test('`sort` action should change sort direction to the opposite on when explicit direction is not provided', () => {
   const onSortedSpy = jest.fn();
   const { sort } = setup({
     onSorted: onSortedSpy,

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { slice } from 'ramda';
+import { slice, equals } from 'ramda';
 
 import { defaultComparator } from '../comparators';
 import noop from '../utils/noop';
+import defaultValueResolver from '../utils/valueResolver';
 import sort, { SortingDirection } from '../utils/sorter';
+
+export { SortingDirection };
 
 export default class Colrow extends Component {
   static propTypes = {
@@ -69,15 +72,25 @@ export default class Colrow extends Component {
   }
 
   render() {
-    const { render, ...props = {} } = this.props;
+    return this.props.render(this.getTableProps());
+  }
 
-    return render(this.getTableProps());
+  getCellProps = ({ row: item, idx, column = {} }) => {
+    const {
+      itemKey = idx,
+      valueResolver = defaultValueResolver,
+    } = column;
+
+    return {
+      value: valueResolver(item, itemKey),
+    };
   }
 
   getTableProps = () => {
     const {
       state,
       sort,
+      getCellProps,
     } = this;
     const {
       rows,
@@ -88,21 +101,30 @@ export default class Colrow extends Component {
     const actions = {
       sort,
     };
+
     const stateItems = {
       rows,
       visibleRows,
       columns,
     };
 
+    const utils = {
+      getCellProps,
+    };
+
     const tableProps = {
       ...actions,
+      ...utils,
       ...stateItems,
     };
 
     return tableProps;
   }
 
-  sort = ({ columnIdx = -1, direction = null }) => {
+  sort = ({
+    columnIdx,
+    direction = null,
+  }) => {
     const {
       pageSize,
       comparator: tableComparator,
@@ -114,6 +136,12 @@ export default class Colrow extends Component {
       direction: sorting.direction,
       requestedDirection: direction,
     });
+
+    const preventSorting = equals(sorting, nextSorting);
+    if (preventSorting) {
+      return;
+    }
+
     const columnToSort = columns[columnIdx];
     const comparator = columnToSort.comparator || tableComparator;
     const itemKey = columnToSort.itemKey || columnIdx;
@@ -124,7 +152,8 @@ export default class Colrow extends Component {
       collection,
       itemKey,
       comparator,
-      direction,
+      valueResolver: columnToSort.valueResolver,
+      direction: nextSorting.direction,
     });
 
     this.onSorted({
