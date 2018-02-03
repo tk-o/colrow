@@ -26,6 +26,7 @@ I prepared small demo that presents what I wrote about above. Two templates - to
 - [x] displays rows
 - [x] sorts collection by given column
 - [x] sorting reset
+- [ ] custom value renderer
 - [ ] storybook
 - [ ] paging
 - [ ] predefined table template
