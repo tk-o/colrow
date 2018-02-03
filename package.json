@@ -1,8 +1,15 @@
 {
   "name": "colrow",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Simple toolset to build super-powered table components in React 🗓",
   "main": "dist/index.js",
+  "keywords": [
+    "react",
+    "table",
+    "list",
+    "collection",
+    "sorting"
+  ],
   "repository": "git@github.com:kopacki/colrow.git",
   "author": "Tomasz Kopacki <tomasz@kopacki.net>",
   "license": "MIT",
