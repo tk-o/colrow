@@ -1,6 +1,6 @@
 {
   "name": "colrow",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Simple toolset to build super-powered table components in React 🗓",
   "main": "dist/index.js",
   "keywords": [
