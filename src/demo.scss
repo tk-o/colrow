@@ -5,3 +5,36 @@ section {
 aside {
   flex: 0 0 50%;
 }
+
+[data-sorting] {
+  text-decoration: underline;
+
+  &::after {
+    font-size: 0.5rem;
+    margin: 0.25rem;
+    vertical-align: middle;
+  }
+}
+
+dl {
+  [data-sorting="asc"]::after {
+    content: '▲';
+  }
+
+  [data-sorting="desc"]::after {
+    content: '▼'
+  }
+}
+
+table {
+  :not([data-sorting="asc"]):not([data-sorting="desc"]) {
+    content: '↕';
+  }
+  [data-sorting="asc"]::after {
+    content: '↑';
+  }
+
+  [data-sorting="desc"]::after {
+    content: '↓'
+  }
+}

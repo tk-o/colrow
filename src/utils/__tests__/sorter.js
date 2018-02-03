@@ -17,6 +17,16 @@ test('sorter returns input collection on output if comparator is not provided', 
   expect(stillNotSortedCollection).toMatchObject(notSortedCollection);
 });
 
+test('sorter returns input collection on output if sortingDirection is not provided', () => {
+  const notSortedCollection = [1, 2, 3];
+  const stillNotSortedCollection = sort({
+    collection: notSortedCollection,
+    direction: null,
+  });
+
+  expect(stillNotSortedCollection).toMatchObject(notSortedCollection);
+});
+
 test('sorter returns collection of the same length as input one', () => {
   const notSortedCollection = [1, 2, 3];
   const sortedCollection = sort({ collection: notSortedCollection });
@@ -120,10 +130,11 @@ test('sorter uses custom value resolver over itemKey if resolver function is pro
 function sortAndExtractColumn({
   collection,
   itemKey,
+  direction = SortingDirection.ASC,
   comparator = defaultComparator,
   valueResolver = defaulValueResolver,
 }) {
-  return sort({ collection, itemKey, comparator, valueResolver })
+  return sort({ collection, itemKey, comparator, direction, valueResolver })
     .map(item => valueResolver(item, itemKey));
 }
 

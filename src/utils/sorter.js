@@ -3,18 +3,21 @@ import defaultValueResolver from './valueResolver';
 
 export default function sort({
   comparator,
-  direction,
   collection,
   itemKey,
+  direction = null,
   valueResolver: resolveValue = defaultValueResolver,
 } = {}) {
   if (!Array.isArray(collection)) {
     throw TypeError('Input collection needs to be provied as an array');
   }
 
-  if (typeof comparator !== 'function') {
+  const isThereNoNeedToSort = typeof comparator !== 'function' || direction === null;
+
+  if (isThereNoNeedToSort) {
     return collection;
   }
+
   const sortedCollection = collection.sort((a, b) =>
     comparator(
       resolveValue(a, itemKey),

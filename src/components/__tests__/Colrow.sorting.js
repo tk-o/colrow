@@ -29,6 +29,26 @@ test('`sort` action should call `onSorting` and then `onSorted` actions', () => 
   expect(onSortingSpy.mock.timestamps[0]).not.toBeGreaterThan(onSortedSpy.mock.timestamps[0])
 });
 
+test('`sort` action can be reset to initial state', () => {
+  const onSortedSpy = jest.fn();
+  const { sort } = setup({
+    onSorted: onSortedSpy,
+  });
+
+  sort({ columnIdx: 0 });
+  sort({ columnIdx: -1 });
+  expect(onSortedSpy).toHaveBeenLastCalledWith({
+    prevSorting: {
+      columnIdx: 0,
+      direction: SortingDirection.ASC,
+    },
+    sorting: {
+      columnIdx: -1,
+      direction: null,
+    },
+  });
+});
+
 
 test('`sort` action should not trigger sorter if sorting data is the same as previous one', () => {
   const onSortedSpy = jest.fn();

@@ -56,11 +56,11 @@ render(<App />, rootNode);
 function renderList({ sort, rows, visibleRows, columns, getCellProps }) {
   const sortData = (event) => {
     const [idx, direction] = event.target.value.split(':');
-    sort({ columnIdx: idx });
+    sort({ columnIdx: idx, direction });
   };
   const sortableColumns = unnest(
-    columns.map(column =>
-      [[SortingDirection.ASC, column], [SortingDirection.DESC, column]]
+    columns.map((column, idx) =>
+      [[SortingDirection.ASC, idx, column], [SortingDirection.DESC, idx, column]]
     )
   );
 
@@ -70,8 +70,9 @@ function renderList({ sort, rows, visibleRows, columns, getCellProps }) {
         Sort list by
       </label>
       <select id="sortListBy" onChange={sortData}>
-        {sortableColumns.map(([sortingDirection, { name }], idx) => (
-          <option value={`${idx}:${sortingDirection}`} key={idx} onClick={sortData}>{name} ({sortingDirection})</option>
+        <option value="-1:null">None</option>
+        {sortableColumns.map(([sortingDirection, columnIdx, { name }], idx) => (
+          <option value={`${columnIdx}:${sortingDirection}`} key={idx} onClick={sortData}>{name} ({sortingDirection})</option>
         ))}
       </select>
       <ol>
@@ -79,11 +80,11 @@ function renderList({ sort, rows, visibleRows, columns, getCellProps }) {
           <li key={idx}>
             <dl>
               {columns.map((column, idx) => {
-                const { value } = getCellProps({ row, column, idx });
+                const { value, sortingDirection } = getCellProps({ row, column, idx });
                 const { name } = column;
                 return (
                   <Fragment key={idx}>
-                    <dt>{name}</dt>
+                    <dt data-sorting={sortingDirection}>{name}</dt>
                     <dd>{value}</dd>
                   </Fragment>
                 )
@@ -102,9 +103,15 @@ function renderTable({ sort, rows, visibleRows, columns, getCellProps }) {
   <table>
     <thead>
       <tr>
-        {columns.map(({ name }, idx) => (
-          <th key={idx} onClick={sortData(idx)}>{name}</th>
-        ))}
+        {columns.map(({ name }, idx) => {
+          const { sortingDirection } = getCellProps({ idx });
+          return (
+            <th key={idx}
+              onClick={sortData(idx)}
+              data-sorting={sortingDirection}
+            >{name}</th>
+          );
+        })}
       </tr>
     </thead>
     <tbody>

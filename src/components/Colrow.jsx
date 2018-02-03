@@ -75,14 +75,23 @@ export default class Colrow extends Component {
     return this.props.render(this.getTableProps());
   }
 
-  getCellProps = ({ row: item, idx, column = {} }) => {
+  getCellProps = ({ idx, row: item, column = {} }) => {
+    const { sorting } = this.state;
+    const sortingDirection = idx != null && sorting.columnIdx === idx
+      ? sorting.direction
+      : null;
+
     const {
       itemKey = idx,
       valueResolver = defaultValueResolver,
     } = column;
+    const value = item != null && idx != null
+      ? valueResolver(item, itemKey)
+      : null;
 
     return {
-      value: valueResolver(item, itemKey),
+      value,
+      sortingDirection
     };
   }
 
@@ -142,7 +151,7 @@ export default class Colrow extends Component {
       return;
     }
 
-    const columnToSort = columns[columnIdx];
+    const columnToSort = columns[columnIdx] || {};
     const comparator = columnToSort.comparator || tableComparator;
     const itemKey = columnToSort.itemKey || columnIdx;
 
@@ -195,12 +204,19 @@ function getNextSorting({
   direction,
   requestedDirection,
 }) {
+  if (columnIdx === -1) {
+    return {
+      columnIdx,
+      direction: null,
+    };
+  }
+
   const opositDirection = direction !== SortingDirection.ASC
     ? SortingDirection.ASC
     : SortingDirection.DESC;
 
   return {
-    columnIdx,
+    columnIdx: parseInt(columnIdx, 10),
     direction: requestedDirection != null
       ? requestedDirection
       : opositDirection,
