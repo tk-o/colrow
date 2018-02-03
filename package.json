@@ -1,6 +1,6 @@
 {
   "name": "colrow",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Simple toolset to build super-powered table components in React 🗓",
   "main": "lib/colrow.umd.js",
   "module": "lib/colrow.esm.js",
