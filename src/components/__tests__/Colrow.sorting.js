@@ -6,7 +6,6 @@ import {
 } from './Colrow.main';
 import defaultValueResolver from '../../utils/valueResolver';
 
-
 test('handler returns `sort` action', () => {
   const { sort } = setup();
 
@@ -35,20 +34,36 @@ test('`sort` action can be reset to initial state', () => {
     onSorted: onSortedSpy,
   });
 
-  sort({ columnIdx: 0 });
+  sort({ columnIdx: 0, direction: SortingDirection.DESC });
   sort({ columnIdx: -1 });
-  expect(onSortedSpy).toHaveBeenLastCalledWith({
-    prevSorting: {
-      columnIdx: 0,
-      direction: SortingDirection.ASC,
-    },
-    sorting: {
-      columnIdx: -1,
-      direction: null,
-    },
-  });
+
+  expect(onSortedSpy).toHaveBeenLastCalledWith(
+    expect.objectContaining({
+      prevSorting: {
+        columnIdx: 0,
+        direction: SortingDirection.DESC,
+      },
+      sorting: {
+        columnIdx: -1,
+        direction: null,
+      },
+    })
+  );
 });
 
+test('reset sets collection to its initial state', async () => {
+  const onSortedSpy = jest.fn();
+  const collection = [1, 2, 3];
+  const { wrapper, sort } = setup({
+    rows: collection,
+    onSorted: onSortedSpy
+  });
+
+  sort({ columnIdx: 0, direction: SortingDirection.DESC });
+  sort({ columnIdx: -1 });
+
+  expect(wrapper.state().rows).toMatchObject(collection);
+});
 
 test('`sort` action should not trigger sorter if sorting data is the same as previous one', () => {
   const onSortedSpy = jest.fn();
@@ -73,16 +88,18 @@ test('`sort` action should change sort direction to the explicit direction when 
   expect.assertions(3);
 
   sort({ columnIdx: 0, direction: SortingDirection.ASC });
-  expect(onSortedSpy).toHaveBeenCalledWith({
-    prevSorting: {
-      columnIdx: -1,
-      direction: null,
-    },
-    sorting: {
-      columnIdx: 0,
-      direction: SortingDirection.ASC,
-    },
-  });
+  expect(onSortedSpy).toHaveBeenCalledWith(
+    expect.objectContaining({
+      prevSorting: {
+        columnIdx: -1,
+        direction: null,
+      },
+      sorting: {
+        columnIdx: 0,
+        direction: SortingDirection.ASC,
+      }
+    })
+  );
   onSortedSpy.mockClear();
 
   sort({ columnIdx: 0, direction: SortingDirection.ASC });
@@ -90,16 +107,18 @@ test('`sort` action should change sort direction to the explicit direction when 
   onSortedSpy.mockClear();
 
   sort({ columnIdx: 0, direction: SortingDirection.DESC });
-  expect(onSortedSpy).toHaveBeenCalledWith({
-    prevSorting: {
-      columnIdx: 0,
-      direction: SortingDirection.ASC,
-    },
-    sorting: {
-      columnIdx: 0,
-      direction: SortingDirection.DESC,
-    },
-  });
+  expect(onSortedSpy).toHaveBeenCalledWith(
+    expect.objectContaining({
+      prevSorting: {
+        columnIdx: 0,
+        direction: SortingDirection.ASC,
+      },
+      sorting: {
+        columnIdx: 0,
+        direction: SortingDirection.DESC,
+      },
+    })
+  );
 });
 
 test('`sort` action should change sort direction to the opposite on when explicit direction is not provided', () => {
@@ -111,40 +130,46 @@ test('`sort` action should change sort direction to the opposite on when explici
   expect.assertions(3);
 
   sort({ columnIdx: 0 });
-  expect(onSortedSpy).toHaveBeenLastCalledWith({
-    prevSorting: {
-      columnIdx: -1,
-      direction: null,
-    },
-    sorting: {
-      columnIdx: 0,
-      direction: SortingDirection.ASC,
-    },
-  });
+  expect(onSortedSpy).toHaveBeenLastCalledWith(
+    expect.objectContaining({
+      prevSorting: {
+        columnIdx: -1,
+        direction: null,
+      },
+      sorting: {
+        columnIdx: 0,
+        direction: SortingDirection.ASC,
+      },
+    })
+  );
 
   sort({ columnIdx: 0 });
-  expect(onSortedSpy).toHaveBeenLastCalledWith({
-    prevSorting: {
-      columnIdx: 0,
-      direction: SortingDirection.ASC,
-    },
-    sorting: {
-      columnIdx: 0,
-      direction: SortingDirection.DESC,
-    },
-  });
+  expect(onSortedSpy).toHaveBeenLastCalledWith(
+    expect.objectContaining({
+      prevSorting: {
+        columnIdx: 0,
+        direction: SortingDirection.ASC,
+      },
+      sorting: {
+        columnIdx: 0,
+        direction: SortingDirection.DESC,
+      },
+    })
+  );
 
   sort({ columnIdx: 0 });
-  expect(onSortedSpy).toHaveBeenLastCalledWith({
-    prevSorting: {
-      columnIdx: 0,
-      direction: SortingDirection.DESC,
-    },
-    sorting: {
-      columnIdx: 0,
-      direction: SortingDirection.ASC,
-    },
-  });
+  expect(onSortedSpy).toHaveBeenLastCalledWith(
+    expect.objectContaining({
+      prevSorting: {
+        columnIdx: 0,
+        direction: SortingDirection.DESC,
+      },
+      sorting: {
+        columnIdx: 0,
+        direction: SortingDirection.ASC,
+      },
+    })
+  );
 });
 
 test('use custom sorter if defined for the column', () => {

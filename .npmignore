@@ -1,6 +1,8 @@
-node_modules
-dist
-coverage
+.circleci
 .cache
-src
 config
+coverage
+dist
+example
+node_modules
+src

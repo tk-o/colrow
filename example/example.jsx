@@ -2,16 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { render } from 'react-dom';
 import unnest from 'ramda/src/unnest';
 
-import Colrow, { SortingDirection } from './components/Colrow';
+import Colrow, { SortingDirection } from '../lib/colrow.umd';
 
 class App extends Component {
-  state = {
-    columns: getColumns(),
-    rows: getRows(),
-  }
-
   renderList() {
-    const { columns, rows } = this.state;
+    const { columns, rows } = this.props;
 
     return (
       <aside>
@@ -27,7 +22,7 @@ class App extends Component {
   }
 
   renderTable() {
-    const { columns, rows } = this.state;
+    const { columns, rows } = this.props;
     return (
       <aside>
         <header>
@@ -50,9 +45,13 @@ class App extends Component {
     )
   }
 }
+const props = {
+  columns: getColumns(),
+  rows: getRows(),
+};
 
 const rootNode = document.getElementById('root');
-render(<App />, rootNode);
+render(<App {...props} />, rootNode);
 
 function renderList({ sort, rows, visibleRows, columns, getCellProps }) {
   const sortData = (event) => {
@@ -105,41 +104,41 @@ function renderTable({ sort, rows, visibleRows, columns, getCellProps }) {
   const sortData = (idx) => () => sort({ columnIdx: idx });
   const unsort = () => sort({ columnIdx: -1 });
   return (
-  <table>
-    <thead>
-      <tr>
-        {columns.map(({ name }, idx) => {
-          const { sortingDirection } = getCellProps({ idx });
-          return (
-            <th key={idx}
-              onClick={sortData(idx)}
-              data-sorting={sortingDirection}
-            >{name}</th>
-          );
-        })}
-      </tr>
-    </thead>
-    <tbody>
-      {visibleRows.map((row, idx) => (
-        <tr key={idx}>
-          {columns.map((column, idx) => {
-            const { value } = getCellProps({ row, column, idx });
+    <table>
+      <thead>
+        <tr>
+          {columns.map(({ name }, idx) => {
+            const { sortingDirection } = getCellProps({ idx });
             return (
-              <td key={idx}>{value}</td>
-            )
+              <th key={idx}
+                onClick={sortData(idx)}
+                data-sorting={sortingDirection}
+              >{name}</th>
+            );
           })}
         </tr>
-      ))}
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>
-          <button onClick={unsort}>Unsort table</button>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-);
+      </thead>
+      <tbody>
+        {visibleRows.map((row, idx) => (
+          <tr key={idx}>
+            {columns.map((column, idx) => {
+              const { value } = getCellProps({ row, column, idx });
+              return (
+                <td key={idx}>{value}</td>
+              )
+            })}
+          </tr>
+        ))}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>
+            <button onClick={unsort}>Unsort table</button>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  );
 }
 
 function getColumns() {

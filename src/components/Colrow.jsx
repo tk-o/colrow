@@ -136,10 +136,14 @@ export default class Colrow extends Component {
   }) => {
     const {
       pageSize,
+      columns,
+      rows: initialRows,
       comparator: tableComparator,
-      rows: collection,
     } = this.props;
-    const { sorting, columns } = this.state;
+    const {
+      sorting,
+      rows: collection,
+    } = this.state;
     const nextSorting = getNextSorting({
       columnIdx,
       direction: sorting.direction,
@@ -148,6 +152,7 @@ export default class Colrow extends Component {
 
     const preventSorting = sorting.columnIdx === nextSorting.columnIdx
       && sorting.direction === nextSorting.direction;
+
     if (preventSorting) {
       return;
     }
@@ -158,13 +163,16 @@ export default class Colrow extends Component {
 
     this.props.onSorting({ sorting, nextSorting });
 
-    const sortedRows = sort({
-      collection,
-      itemKey,
-      comparator,
-      valueResolver: columnToSort.valueResolver,
-      direction: nextSorting.direction,
-    });
+    const resetSorting = nextSorting.columnIdx === -1;
+    const sortedRows = resetSorting
+      ? initialRows
+      : sort({
+        collection,
+        itemKey,
+        comparator,
+        valueResolver: columnToSort.valueResolver,
+        direction: nextSorting.direction,
+      });
 
     this.onSorted({
       sortedRows,
@@ -183,7 +191,7 @@ export default class Colrow extends Component {
         visibleRows,
         rows,
       }),
-      () => this.props.onSorted({ prevSorting, sorting }),
+      () => this.props.onSorted({ prevSorting, sorting, rows, visibleRows }),
     );
   }
 

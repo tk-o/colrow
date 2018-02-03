@@ -35,6 +35,14 @@ test('sorter returns collection of the same length as input one', () => {
   expect(sortedCollection).toHaveLength(notSortedCollection.length);
 });
 
+test('sorter does not introduce side effects', () => {
+  const collection = [1, 2, 3];
+
+  sort({ collection, itemKey: 0, direction: SortingDirection.DESC, comparator: defaultComparator });
+
+  expect(collection).toMatchObject([1, 2, 3]);
+});
+
 test('sorter returns collection using proper direction', () => {
   const notSortedCollection = [1, 2, 3];
 

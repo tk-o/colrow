@@ -18,7 +18,7 @@ export default function sort({
     return collection;
   }
 
-  const sortedCollection = collection.sort((a, b) =>
+  const sortedCollection = [...collection].sort((a, b) =>
     comparator(
       resolveValue(a, itemKey),
       resolveValue(b, itemKey)

@@ -2,8 +2,6 @@
 const rollupBabel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
 const nodeResolve = require('rollup-plugin-node-resolve');
-const uglify = require('rollup-plugin-uglify');
-const stripPropTypes = require('rollup-plugin-strip-prop-types');
 
 const pkg = require('./package.json');
 const babel = pkg.babel.env.production;
@@ -15,7 +13,7 @@ module.exports = {
       name: pkg.name,
       file: pkg.main,
       exports: 'named',
-      format: 'cjs',
+      format: 'umd',
     },
     {
       file: pkg.module,
@@ -23,7 +21,11 @@ module.exports = {
       format: 'es',
     }
   ],
-  external: ['react', 'react-dom'],
+  sourceMap: true,
+  external: ['react'],
+  globals: {
+    'react': 'React'
+  },
   plugins: [
     nodeResolve({ jsnext: true, main: true }),
     commonjs({ include: 'node_modules/**' }),
@@ -33,7 +35,5 @@ module.exports = {
       exclude: 'node_modules/**',
       babelrc: false,
     }),
-    stripPropTypes(),
-    uglify(),
   ],
 };

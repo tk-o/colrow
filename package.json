@@ -14,6 +14,9 @@
   "repository": "git@github.com:kopacki/colrow.git",
   "author": "Tomasz Kopacki <tomasz@kopacki.net>",
   "license": "MIT",
+  "scripts": {
+    "test": "nps test.ci"
+  },
   "babel": {
     "env": {
       "production": {
@@ -29,7 +32,6 @@
         "plugins": [
           "transform-class-properties",
           "transform-object-rest-spread",
-          "syntax-object-rest-spread",
           "external-helpers"
         ]
       }
@@ -50,15 +52,12 @@
     "cacheDirectory": "node_modules/.cache",
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx}",
-      "!src/demo.jsx"
+      "src/**/*.{js,jsx}"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/config/setupTests.js"
   },
   "dependencies": {
-    "ramda": "0.25.0",
-    "react": "16.2.0",
-    "react-dom": "16.2.0"
+    "ramda": "0.25.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
@@ -84,12 +83,12 @@
     "nps-utils": "1.5.0",
     "parcel-bundler": "1.5.0",
     "prop-types": "15.6.0",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
     "regenerator-runtime": "0.11.1",
     "rollup": "0.55.3",
     "rollup-plugin-babel": "3.0.3",
     "rollup-plugin-commonjs": "8.3.0",
-    "rollup-plugin-node-resolve": "3.0.2",
-    "rollup-plugin-strip-prop-types": "1.0.2",
-    "rollup-plugin-uglify": "3.0.0"
+    "rollup-plugin-node-resolve": "3.0.2"
   }
 }
