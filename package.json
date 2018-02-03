@@ -14,7 +14,7 @@
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
-      "!src/index.js"
+      "!src/demo.jsx"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/config/setupTests.js"
   },
@@ -40,6 +40,7 @@
     "eslint-plugin-react": "7.6.0",
     "jest": "22.1.4",
     "jest-junit": "3.4.1",
+    "node-sass": "^4.7.2",
     "nps": "5.7.1",
     "nps-utils": "1.5.0",
     "parcel-bundler": "1.5.0",
