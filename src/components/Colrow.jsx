@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { slice, equals } from 'ramda';
+import slice from 'ramda/src/slice';
 
 import { defaultComparator } from '../comparators';
 import noop from '../utils/noop';
@@ -146,7 +146,8 @@ export default class Colrow extends Component {
       requestedDirection: direction,
     });
 
-    const preventSorting = equals(sorting, nextSorting);
+    const preventSorting = sorting.columnIdx === nextSorting.columnIdx
+      && sorting.direction === nextSorting.direction;
     if (preventSorting) {
       return;
     }

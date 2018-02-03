@@ -1,4 +1,4 @@
-import { always } from 'ramda';
+import always from 'ramda/src/always';
 import defaultValueResolver from './valueResolver';
 
 export default function sort({

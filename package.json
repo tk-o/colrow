@@ -2,7 +2,8 @@
   "name": "colrow",
   "version": "0.1.0",
   "description": "Simple toolset to build super-powered table components in React 🗓",
-  "main": "dist/index.js",
+  "main": "lib/colrow.umd.js",
+  "module": "lib/colrow.esm.js",
   "keywords": [
     "react",
     "table",
@@ -13,6 +14,35 @@
   "repository": "git@github.com:kopacki/colrow.git",
   "author": "Tomasz Kopacki <tomasz@kopacki.net>",
   "license": "MIT",
+  "babel":{
+    "env": {
+      "production": {
+        "presets": [
+          [
+            "env",
+            {
+              "modules": false
+            }
+          ],
+          "react"
+        ],
+        "plugins": [
+          "transform-class-properties",
+          "transform-object-rest-spread",
+          "syntax-object-rest-spread",
+          "external-helpers"
+        ]
+      }
+    },
+    "presets": [
+      "env",
+      "react"
+    ],
+    "plugins": [
+      "transform-class-properties",
+      "syntax-object-rest-spread"
+    ]
+  },
   "jest": {
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
@@ -34,8 +64,10 @@
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-jest": "22.1.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-syntax-object-rest-spread": "6.13.0",
     "babel-plugin-transform-class-properties": "6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "1.6.1",
     "babel-preset-react": "6.24.1",
     "enzyme": "3.3.0",
@@ -52,6 +84,11 @@
     "nps-utils": "1.5.0",
     "parcel-bundler": "1.5.0",
     "prop-types": "15.6.0",
-    "regenerator-runtime": "0.11.1"
+    "regenerator-runtime": "0.11.1",
+    "rollup": "0.55.3",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-commonjs": "^8.3.0",
+    "rollup-plugin-node-resolve": "^3.0.2",
+    "rollup-plugin-uglify": "^3.0.0"
   }
 }

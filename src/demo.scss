@@ -8,7 +8,10 @@ aside {
 
 [data-sorting] {
   text-decoration: underline;
+}
 
+[data-sorting],
+table th {
   &::after {
     font-size: 0.5rem;
     margin: 0.25rem;
@@ -27,7 +30,7 @@ dl {
 }
 
 table {
-  :not([data-sorting="asc"]):not([data-sorting="desc"]) {
+  th:not([data-sorting])::after {
     content: '↕';
   }
   [data-sorting="asc"]::after {

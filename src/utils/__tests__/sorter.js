@@ -1,4 +1,4 @@
-import { zipObj } from 'ramda';
+import zipObj from 'ramda/src/zipObj';
 
 import sort, { SortingDirection } from '../sorter';
 import { defaultComparator, stringLengthComparator } from '../../comparators';

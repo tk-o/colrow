@@ -2,8 +2,8 @@ const { concurrent } = require('nps-utils');
 
 module.exports = {
   scripts: {
-    default: 'parcel -p index.html',
-    build: 'parcel build src/index.js --out-dir build',
+    default: 'parcel index.html',
+    build: 'BABEL_ENV=production rollup -c',
     test: {
       default: 'jest',
       watch: 'jest --watch',

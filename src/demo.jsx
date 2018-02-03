@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { render } from 'react-dom';
-import { unnest } from 'ramda';
+import unnest from 'ramda/src/unnest';
+
 import Colrow, { SortingDirection } from './components/Colrow';
 
 class App extends Component {
@@ -15,7 +16,7 @@ class App extends Component {
     return (
       <aside>
         <header>
-          <strong>List example</strong>
+          <strong>List example (without <i>Symbol</i> column)</strong>
         </header>
         <Colrow columns={columns}
           rows={rows}
@@ -30,7 +31,7 @@ class App extends Component {
     return (
       <aside>
         <header>
-          <strong>Table example</strong>
+          <strong>Table example (all columns)</strong>
         </header>
         <Colrow columns={columns}
           rows={rows}
@@ -58,8 +59,11 @@ function renderList({ sort, rows, visibleRows, columns, getCellProps }) {
     const [idx, direction] = event.target.value.split(':');
     sort({ columnIdx: idx, direction });
   };
+
+  const columnsWithoutSymbol = columns.filter(column => column.name !== 'Sybmol');
+
   const sortableColumns = unnest(
-    columns.map((column, idx) =>
+    columnsWithoutSymbol.map((column, idx) =>
       [[SortingDirection.ASC, idx, column], [SortingDirection.DESC, idx, column]]
     )
   );
@@ -99,6 +103,7 @@ function renderList({ sort, rows, visibleRows, columns, getCellProps }) {
 
 function renderTable({ sort, rows, visibleRows, columns, getCellProps }) {
   const sortData = (idx) => () => sort({ columnIdx: idx });
+  const unsort = () => sort({ columnIdx: -1 });
   return (
   <table>
     <thead>
@@ -126,6 +131,13 @@ function renderTable({ sort, rows, visibleRows, columns, getCellProps }) {
         </tr>
       ))}
     </tbody>
+    <tfoot>
+      <tr>
+        <td>
+          <button onClick={unsort}>Unsort table</button>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 );
 }

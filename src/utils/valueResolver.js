@@ -1,4 +1,4 @@
-import { path } from 'ramda';
+import path from 'ramda/src/path';
 
 export default function defaultValueResolver(item, itemKey) {
   const itemKeyWrapped = typeof itemKey === 'string'
