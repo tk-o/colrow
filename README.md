@@ -59,7 +59,7 @@ import Colrow, { SortingDirection } from 'colrow';
 #### Prop definitions
 
 **columns**
->This one is required to be an array and contain at least one object (as we're about to present some data ;))
+>This one is required to be an array and contains at least one object (as we're about to present some data ;))
 >You can define any properties within `columnItem`, so feel free to put there whatever you'd need to present.
 >One important thing about `columnItem` is you can enhance it with `itemKey` and `valueResolver` properties.
 >Please have a look at the explanation beneath.
@@ -126,7 +126,7 @@ const columnsExample = [
   },
 ];
 ```
-_rows as array of plain objects
+_rows as array of plain objects_
 ```jsx
 // nested arrays
 const rows = [
