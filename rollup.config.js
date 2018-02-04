@@ -22,9 +22,10 @@ module.exports = {
     }
   ],
   sourceMap: true,
-  external: ['react'],
+  external: ['react', 'prop-types'],
   globals: {
-    'react': 'React'
+    'react': 'React',
+    'prop-types': 'PropTypes',
   },
   plugins: [
     nodeResolve({ jsnext: true, main: true }),

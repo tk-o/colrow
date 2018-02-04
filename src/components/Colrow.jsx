@@ -47,7 +47,7 @@ export default class Colrow extends Component {
     pageNo: 1,
   }
 
-  state = {
+  initialState = {
     visibleRows: extractVisibleRows({
       rows: this.props.rows,
       pageNo: this.props.pageNo,
@@ -55,20 +55,29 @@ export default class Colrow extends Component {
     }),
     rows: this.props.rows,
     columns: this.props.columns,
-    sorting: {
-      columnIdx: this.props.sortByColumnIdx,
-      direction: this.props.sortDirection,
-    },
+    sorting: transformSortingPropsToState(Colrow.defaultProps),
   }
 
-  componentDidMount() {
-    if (this.state.columns.length === 0) {
+  state = { ...this.initialState }
+
+  componentWillMount() {
+    if (this.props.columns.length === 0) {
       throw Error('At least one column definition must be provided');
     }
+
+    this.validateSortingProps(
+      transformSortingPropsToState(Colrow.defaultProps),
+      transformSortingPropsToState(this.props)
+    );
+    this.validateLoadingProps(Colrow.defaultProps.isLoading, this.props.isLoading);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.checkLoadingState(this.props.isLoading, nextProps.isLoading);
+    this.validateSortingProps(
+      transformSortingPropsToState(this.props),
+      transformSortingPropsToState(nextProps)
+    );
+    this.validateLoadingProps(this.props.isLoading, nextProps.isLoading);
   }
 
   render() {
@@ -195,7 +204,16 @@ export default class Colrow extends Component {
     );
   }
 
-  checkLoadingState = (prevIsLoading, nextIsLoading) => {
+  validateSortingProps = (prevSorting, nextSorting) => {
+    const shouldRunInitialSort = prevSorting.columnIdx !== nextSorting.columnIdx
+      || prevSorting.direction !== nextSorting.direction;
+
+    if(shouldRunInitialSort) {
+      this.sort(transformSortingPropsToState(this.props));
+    }
+  }
+
+  validateLoadingProps = (prevIsLoading, nextIsLoading) => {
     const hasToggledLogging = prevIsLoading !== nextIsLoading;
 
     if (hasToggledLogging) {
@@ -249,6 +267,16 @@ function evaluateFirstRowIdx(pageNo, pageSize) {
 
 function evaluateLastRowIdx(pageNo, pageSize) {
   return evaluateFirstRowIdx(pageNo, pageSize) + pageSize;
+}
+
+function transformSortingPropsToState({
+  sortByColumnIdx: columnIdx,
+  sortDirection: direction,
+}) {
+  return {
+    columnIdx,
+    direction,
+  };
 }
 
 function DefaultRenderer(params) {

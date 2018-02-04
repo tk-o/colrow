@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { render } from 'react-dom';
 import unnest from 'ramda/src/unnest';
 
-import Colrow, { SortingDirection } from '../lib/colrow.umd';
+import Colrow, { SortingDirection } from '../src/components/Colrow';
 
 class App extends Component {
   renderList() {
@@ -31,6 +31,8 @@ class App extends Component {
         <Colrow columns={columns}
           rows={rows}
           render={renderTable}
+          sortByColumnIdx={1}
+          sortDirection={SortingDirection.DESC}
         />
       </aside>
     )

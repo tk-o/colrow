@@ -28,6 +28,24 @@ test('`sort` action should call `onSorting` and then `onSorted` actions', () => 
   expect(onSortingSpy.mock.timestamps[0]).not.toBeGreaterThan(onSortedSpy.mock.timestamps[0])
 });
 
+test('sort action is performed for defined sorting props', () => {
+  const onSortedSpy = jest.fn();
+
+  setup({
+    onSorted: onSortedSpy,
+  });
+
+  expect(onSortedSpy).not.toHaveBeenCalled();
+
+  setup({
+    onSorted: onSortedSpy,
+    sortByColumnIdx: 1,
+    sortDriection: SortingDirection.ASC,
+  });
+
+  expect(onSortedSpy).toHaveBeenCalledTimes(1);
+});
+
 test('`sort` action can be reset to initial state', () => {
   const onSortedSpy = jest.fn();
   const { sort } = setup({
