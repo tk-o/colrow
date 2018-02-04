@@ -45,3 +45,5 @@ jobs:
           command: yarn jest tests --ci --testResultsProcessor="jest-junit"
           environment:
             JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
+
+      - run: yarn jest --coverage && cat ./coverage/lcov.info | yarn coveralls
