@@ -26,7 +26,8 @@ I prepared small demo that presents what I wrote about above. Two templates - to
 - [x] displays rows
 - [x] sorts collection by given column
 - [x] sorting reset
-- [x] custom value resolver for cell (transform any cell value into somethig you need i.e. another React component
+- [x] custom value resolver for cell - provide raw value for sorting
+- [ ] custom value presenter for cell - provide decorated value for presentation
 - [ ] pagination features
 - [ ] loading state
 - [ ] predefined table components
