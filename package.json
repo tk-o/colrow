@@ -67,6 +67,7 @@
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.6.1",
     "babel-preset-react": "6.24.1",
+    "colrow": "^0.3.0",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "eslint": "4.16.0",
@@ -80,6 +81,7 @@
     "nps": "5.7.1",
     "nps-utils": "1.5.0",
     "parcel-bundler": "1.5.0",
+    "ramda": "0.25.0",
     "react-dom": "16.2.0",
     "regenerator-runtime": "0.11.1",
     "rollup": "0.55.3",
@@ -87,7 +89,7 @@
     "rollup-plugin-commonjs": "8.3.0",
     "rollup-plugin-node-resolve": "3.0.2"
   },
-  "peerDependencies": {
+  "dependencies": {
     "prop-types": "15.6.0",
     "react": "16.2.0"
   }
