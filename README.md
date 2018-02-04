@@ -126,7 +126,7 @@ const columnsExample = [
   },
 ];
 ```
-_rows as array of plain objects
+_rows as array of plain objects_
 ```jsx
 // nested arrays
 const rows = [
